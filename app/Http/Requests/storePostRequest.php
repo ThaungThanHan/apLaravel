@@ -1,5 +1,5 @@
 <?php
-
+// request file. It is using for validation requirements and creating custom messages
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -23,16 +23,18 @@ class storePostRequest extends FormRequest
      */
     public function rules()             // Validation requirements
     {
-        return [
-            'name' => 'required|unique:posts|max:255',
-            'description' => 'required|max:255'
+        return [                        // Columns' names
+            'name' => 'required|unique:posts|max:255',  // 
+            'description' => 'required|max:255',
+            'category_id'=>'required'
         ];
     }
     public function messages()          // error messages
     {
         return [    // arrows only in [] arrays
             'name.required' => 'A name is required.',
-            'description.required' => 'A description is required.'
+            'description.required' => 'A description is required.',
+            'category_id.required' => 'Please select a category. '
         ];
     }
 }

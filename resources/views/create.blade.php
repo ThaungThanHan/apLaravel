@@ -31,10 +31,17 @@
       <div class="alert alert-danger" style="margin-top:.5rem">{{ $message }}</div>
     @enderror
   </div>
-  <div class="form-check">
-    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-  </div>
+  <select name="category_id" id="" fullWidth>
+    <option value="">Select Category</option>
+    @foreach($categories as $cat)
+      <option value="{{$cat->id}}">{{$cat->name}}</option>
+    @endforeach
+  </select>
+  @error('category')
+      <div class="alert alert-danger" style="margin-top:.5rem">{{ $message }}</div>
+  @enderror
+  <hr/>
+
   <button type="submit" class="btn btn-primary">Submit</button>
   <a href="/posts" class="btn btn-success"> Back </a>
 </form>

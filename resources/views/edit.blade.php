@@ -30,10 +30,12 @@
     >{{old('description',$post->description)}}</textarea>
     <!-- textarea, value apyin mar-->
   </div>
-  <div class="form-check">
-    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-  </div>
+  <select name="category_id" id="" fullWidth>
+    <option value="">Select Category</option>
+    @foreach($categories as $cat)
+      <option value="{{$cat->id}}" {{$cat->id == $post->category_id ? 'selected' : ''}}>{{$cat->name}}</option>
+    @endforeach
+  </select>
   <button type="submit" class="btn btn-primary">Submit</button>
   <a href="/posts" class="btn btn-success"> Back </a>
 </form>

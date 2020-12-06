@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\storePostRequest;
 // use Illuminate\Support\Facades\Route;        // can't useo only one arguement in return redirect.
 
 class HomeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+    public function __construct(){              // can use middleware like this too. constructor method.
+        $this->middleware('auth')->only('index','create');      // only tone pee ko kar chin tae function ko pl kar lo ya tal.
+    }
+     /* @return \Illuminate\Http\Response
      */
     public function index()  // get method
     {
@@ -28,7 +29,8 @@ class HomeController extends Controller
      */
     public function create()    // get method, create form
     {
-        return view('create');
+        $categories = Category::all();              // for selecting categories in Creating posts.
+        return view('create',compact('categories'));
     }
 
     /**
@@ -44,11 +46,14 @@ class HomeController extends Controller
         // $post -> name = $request -> name;
         // $post -> description = $request -> description;
         // $post->save();
-        Post::create([                      // this replaces data assignment above. need fillable mass assignment in model.
-            "name" => $request->name,       
-            "description" => $request->description
-        ]);
-        // Route::redirect('/posts'); // can't useo only one arguement in return redirect..use this function instead.
+
+        // Post::create([                      // this replaces data assignment above. need fillable mass assignment in model.
+        //     "name" => $request->name,       
+        //     "description" => $request->description,
+        //     "category_id" => $request->category,
+        // ]);
+        $validated = $request->validated();     // for validate(), html name="" must equal to column's name
+        Post::create($validated);
         return redirect('/posts');
     } 
 
@@ -58,12 +63,11 @@ class HomeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)           // id tway tone pee show mal. Get method
+    public function show(Post $post)           // id tway tone pee show mal. Get method. No need to use eloquent find id. we use "Post $post" BTS action
     {
         // $post = Post::findOrFail($id);    no need to do this cuz of (Post $post). Laravel does this line BTS.
         // findOrFail shows 404 error instead of NULL if id is unknown. findOrFail = find data with that ($id).
-        dd($post->categories);
-        return view('edit',compact('post'));
+        return view('show',compact('post'));
         // dd($post);
     }
 
@@ -75,8 +79,9 @@ class HomeController extends Controller
      */
     public function edit(Post $post)           // edit form, get method pl tone tal. Edit needs to get current data in the input.
     {                  //(Model_name variable) variable_name needs to be same as {wildcard} in route:list which is auto-generated.
-        $post = Post::findOrFail($id);
-        return view("edit",compact('post'));        // this function is just view for Edit. the below is backend.
+        // $post = Post::findOrFail($id);
+        $categories = Category::all();              // for selecting categories in Creating posts.
+        return view('edit',compact('post','categories'));        // this function is just view for Edit. the below is backend.
     }
 
     /**
@@ -87,19 +92,10 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(storePostRequest $request,Post $post)   // put method
-    {
-        // $request->validate([            // data validation backend.        no needed anymore its in storePostRequest
-        //     'name'=>'required|unique:posts|max:255',            // set the validation requirements
-        //     'description'=>'required|max:255'
-        // ]);
-        // $post->name = $request->name;   // new data nae update lote pyy tar. like setState.
-        // $post->description = $request->description;
-        // $post->save();
-        $post->update([               //Post(model) ka ny tnn tone m ya cuz theres no ID specification. $post has respective id.
-            "name" => $request->name,       
-            "description" => $request->description
-        ]);
-        return redirect('/posts/');
+    {   
+         $validated = $request->validated();
+         $post->update($validated); 
+         return redirect('/posts');
     }
 
     /**
