@@ -13,7 +13,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        'App\Models\Post' => 'App\Policies\PostPolicy',         // Policy declare lote tar.
     ];
 
     /**
@@ -21,10 +21,15 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot()          // Policy 
     {
-        $this->registerPolicies();
-
+        $this->registerPolicies();          
+        // Gate::define('view', function ($user,$post) {   // 'view' from PostPolicy. GATE ka tone tar shrr tal.
+        //     return $user->id === $post->user_id;
+        // });
+        // Gate::before(function ($user) {                     // before ka, Policy tway br tway ma run khin mhar Gate::before ko ayin run tar.
+        //     return $user->id === 2;                         // by doing this, it gives User 2 superuser privileges
+        // });
         //
     }
 }

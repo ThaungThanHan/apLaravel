@@ -3,7 +3,8 @@
 @section('content')
 <div class="container" style="border:none">
 <a href="/posts/create/" class="btn btn-success" style="margin-bottom:.5rem"> Create </a>
-<a href="logout" class="btn btn-warning">Logout</a> <!-- <form> not needed becuz we have login path with AuthController.
+<a href="logout" class="btn btn-warning">Logout</a> <!-- <form> not needed becuz we have login path with AuthController.-->
+<p> {{Auth::User()}} </p>
 <div class="card">
   <div class="card-header" style="text-align:center">
     Contents

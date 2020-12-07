@@ -16,8 +16,9 @@ class HomeController extends Controller
      /* @return \Illuminate\Http\Response
      */
     public function index()  // get method
-    {
-        $data = Post::orderBy('id','desc') -> get(); // check docu for more! orderBy teams. orderBy doh tone dml so get() py ya.
+    {   
+        // dd(auth() -> id());               // auth() function ka "Auth::" facade asrr tone tar thu thu pl. Authenticated phit tae kg
+        $data = Post::where('user_id',auth()->id())->orderBy('id','desc')-> get(); // check docu for more! orderBy teams. orderBy doh tone dml so get() py ya.
         // $data = Post::all();        // imported Model Post. Just the same as week 3 but with RESTful reqs.
         return view("home",compact("data"));
     }
@@ -64,7 +65,11 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Post $post)           // id tway tone pee show mal. Get method. No need to use eloquent find id. we use "Post $post" BTS action
-    {
+    {   
+        // if ($post->user_id != auth()->id()){        // manaually authorization filter
+        //     abort(403);
+        // }
+        $this->authorize('view',$post);         // 'view' so tar PostPolicy ka func. $post yae data ko pass py lite tr PostPolicy ko.
         // $post = Post::findOrFail($id);    no need to do this cuz of (Post $post). Laravel does this line BTS.
         // findOrFail shows 404 error instead of NULL if id is unknown. findOrFail = find data with that ($id).
         return view('show',compact('post'));
@@ -80,6 +85,9 @@ class HomeController extends Controller
     public function edit(Post $post)           // edit form, get method pl tone tal. Edit needs to get current data in the input.
     {                  //(Model_name variable) variable_name needs to be same as {wildcard} in route:list which is auto-generated.
         // $post = Post::findOrFail($id);
+        if ($post->user_id != auth()->id()){
+            abort(403);
+        }
         $categories = Category::all();              // for selecting categories in Creating posts.
         return view('edit',compact('post','categories'));        // this function is just view for Edit. the below is backend.
     }
