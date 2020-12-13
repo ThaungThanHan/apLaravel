@@ -15,9 +15,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\User::factory(20)->create();        // random data nae 20 lines of data win twr mal. Thats Factory.
+        \App\Models\User::factory(20)->create();        // random data nae 20 lines of data win twr mal. Thats Factory. Multi-insert.
 
-        // $this->call([UserSeeder::class,
+        // $this->call([UserSeeder::class,              // single insert using query builders
         //             PostSeeder::class]);
     }
 }
+/// php artisan db:seed ( single or multiple ) will depend upon the codes in this database seeder
