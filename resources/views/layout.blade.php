@@ -1,4 +1,6 @@
 <html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>        <!-- bootstrap jquery and js -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <head>
         <title> AP Laravel </title>
         <h2 style="text-align:center"> Sample Blog Site</h2>

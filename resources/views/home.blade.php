@@ -4,7 +4,13 @@
 <div class="container" style="border:none">
 <a href="/posts/create/" class="btn btn-success" style="margin-bottom:.5rem"> Create </a>
 <a href="logout" class="btn btn-warning">Logout</a> <!-- <form> not needed becuz we have login path with AuthController.-->
-<p> {{Auth::User()}} </p>
+<!-- <p> {{Auth::User()}} </p>      all data of Authenticated user -->
+@if (session('status'))
+    <div class="alert alert-success alert-dismissible">     <!-- this is bootstrap -->
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong>        {{ session('status') }}
+</div>
+  @endif
 <div class="card">
   <div class="card-header" style="text-align:center">
     Contents

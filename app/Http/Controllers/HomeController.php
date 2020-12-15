@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Mail\PostStored;
 use App\Models\Category;
+use App\Mail\PostCreated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\storePostRequest;
 // use Illuminate\Support\Facades\Route;        // can't useo only one arguement in return redirect.
 
@@ -15,17 +19,14 @@ class HomeController extends Controller
     }
      /* @return \Illuminate\Http\Response
      */
-    public function index()  // get method
+    public function index(Request $request)  // get method
     {   
-        // dd(auth() -> id());               // auth() function ka "Auth::" facade asrr tone tar thu thu pl. Authenticated phit tae kg
-        // $data = Post::where('user_id',auth()->id())->orderBy('id','desc')-> get(); // check docu for more! orderBy teams. orderBy doh tone dml so get() py ya.
-        // $data = Post::all();        // imported Model Post. Just the same as week 3 but with RESTful reqs.
-        $posts = Post::pluck('description');
-        // $data = [];
-        // foreach($posts as $post){
-            dd($posts);
-        $data = Post::where('user_id',auth()->id())->orderBy('id','desc') -> get(); 
-
+        
+        // Mail::raw('Hello World',function($msg){         // DUMMY MAIL...DEMO. for real, Mail::to
+        //     $msg->to('kothaung@gmail.com')->subject('AP INDEX FUNCTION');
+        // });  // env mar MAIL_MAILER mar log ko pygg for demo. pee yin log mar twr shr lo ya tal..mail poh lr m poh lar.
+        
+        $data = Post::where('user_id',auth()->id())->orderBy('id','desc')->get();
         return view("home",compact("data"));
     }
 
@@ -60,8 +61,9 @@ class HomeController extends Controller
         //     "category_id" => $request->category,
         // ]);
         $validated = $request->validated();     // for validate(), html name="" must equal to column's name
-        Post::create($validated);
-        return redirect('/posts');
+        Post::create($validated + ['user_id'=>Auth::user()->id]);   // table mr user_id pr loh create yin post mr userid pr htae pyy tar...AUTH htl ka user_Id
+        // Mail::to('kothaung@gmail.com')->send(new PostCreated()); //no need here becuz we use hooks
+        return redirect('/posts')->with('status',config('flashmessage.messages.created'));
     } 
 
     /**
@@ -109,7 +111,7 @@ class HomeController extends Controller
     {   
          $validated = $request->validated();
          $post->update($validated); 
-         return redirect('/posts');
+         return redirect('/posts')->with('status',config('flashmessage.messages.updated'));
     }
 
     /**
@@ -121,6 +123,6 @@ class HomeController extends Controller
     public function destroy(Post $post)        // delete
     {
         $post->delete();
-        return redirect('/posts/');
+        return redirect('/posts/')->with('status',config('flashmessage.messages.deleted'));
     }
 }

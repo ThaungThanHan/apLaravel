@@ -26,7 +26,7 @@ class storePostRequest extends FormRequest
         return [                        // Columns' names
             'name' => 'required|unique:posts|max:255',  // 
             'description' => 'required|max:255',
-            'category_id'=>'required'
+            'category_id'=>'required',
         ];
     }
     public function messages()          // error messages

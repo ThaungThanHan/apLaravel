@@ -14,8 +14,9 @@ return [
     | you may use many connections at once using the Database library.
     |
     */
-
-    'default' => env('DB_CONNECTION', 'mysql'),
+    // env nae chate htr tamya .env file ko pl twr kyi tal.
+    'default' => env('DB_CONNECTION', 'mysql'),     // env m pr yin database default mysql..pr yin mysql yay htr lal .env ko pl kyi
+    // env() tone tar ka .env so tae file mar DB_CONNECTION so tae hr ko twr phat tal.  
 
     /*
     |--------------------------------------------------------------------------
