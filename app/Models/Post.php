@@ -14,17 +14,15 @@ class Post extends Model
     // protected $fillable = ['name','description'];
     protected $guarded =[];
 
-    public function categories()
+        public function categories()       
+        {
+            return $this->belongsTo('App\Models\Category','category_id');   //(Model_path,foreign_key). hasMany and this is belongsTo.
+        }
+    protected static function booted()              // Hook events come in here
     {
-        return $this->belongsTo('App\Models\Category','category_id');   //(Model_path,foreign_key). hasMany and this is belongsTo.
-    }
-    protected static function booted()              // got it from Eloquent ORM doc events laravel
-    {
-        static::created(function ($post) {
-            Mail::to('kothaung@gmail.com')->send(new PostStored($post)); // PostStored ka xml (manual). PostCreated (markdown built)
-        });
-        static::updated(function ($post) {
-            Mail::to('kothaung@gmail.com')->send(new PostStored($post)); // PostStored ka xml (manual). PostCreated (markdown built)
-        });
+        // static::created(function ($post) {
+        //     Mail::to('kothaung@gmail.com')->send(new PostStored($post)); // PostStored ka xml (manual). PostCreated (markdown built)
+        // });
+        
     }
 }

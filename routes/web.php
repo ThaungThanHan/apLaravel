@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 
 Route::get('/',function(){
+    return view('welcome');
     // $container = new Container();
     // $container->bind('test',function(){
     //     return new Test();
@@ -21,8 +22,7 @@ Route::get('/',function(){
 
     // $test = resolve(App\Test::class);   // if Test class doesn't exists, error  
     // dd($test);
-
-    return TestFacade::execute();
+    // return TestFacade::execute();
     });
 Route::resource('posts', HomeController::class);//->middleware(['auth']);  // sanctum lo m  tone lal ya. verified ll m lo cuz config/auth.php
 Route::get('logout', [AuthController::class,'logout']);

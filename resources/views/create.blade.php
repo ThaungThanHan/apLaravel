@@ -33,7 +33,7 @@
   </div>
   <select name="category_id" id="" fullWidth>
     <option value="">Select Category</option>
-    @foreach($categories as $cat)
+    @foreach($categories as $cat)                 <!-- categories htl ka taku si u -->
       <option value="{{$cat->id}}">{{$cat->name}}</option>
     @endforeach
   </select>

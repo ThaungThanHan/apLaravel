@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use App\Mail\PostStored;
 use App\Models\Category;
 use App\Mail\PostCreated;
@@ -10,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\storePostRequest;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\PostCreatedNotification;
 // use Illuminate\Support\Facades\Route;        // can't useo only one arguement in return redirect.
 
 class HomeController extends Controller
@@ -25,7 +28,10 @@ class HomeController extends Controller
         // Mail::raw('Hello World',function($msg){         // DUMMY MAIL...DEMO. for real, Mail::to
         //     $msg->to('kothaung@gmail.com')->subject('AP INDEX FUNCTION');
         // });  // env mar MAIL_MAILER mar log ko pygg for demo. pee yin log mar twr shr lo ya tal..mail poh lr m poh lar.
-        
+        $user = User::find(1);                              // mailing using User Model
+        $user -> notify(new PostCreatedNotification());
+        // Notification::send(User::find(1),new PostCreatedNotification());     // mailing using Noti Facade.
+        echo 'noti sent'; exit();
         $data = Post::where('user_id',auth()->id())->orderBy('id','desc')->get();
         return view("home",compact("data"));
     }
@@ -63,6 +69,7 @@ class HomeController extends Controller
         $validated = $request->validated();     // for validate(), html name="" must equal to column's name
         Post::create($validated + ['user_id'=>Auth::user()->id]);   // table mr user_id pr loh create yin post mr userid pr htae pyy tar...AUTH htl ka user_Id
         // Mail::to('kothaung@gmail.com')->send(new PostCreated()); //no need here becuz we use hooks
+        event(new PostCreatedEvent($post));         // ko create htr tae event ko htae.. This is how to run events.
         return redirect('/posts')->with('status',config('flashmessage.messages.created'));
     } 
 
